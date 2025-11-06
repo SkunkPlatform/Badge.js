@@ -139,4 +139,4 @@ console.log(info);
 
 ## 📄 License
 
-MIT © 2025 **SkunkPlatform*
+MIT © 2025 **SkunkPlatform**
