@@ -1,13 +1,13 @@
 # 🏅 Badge.js
 
 **Badge.js** is a lightweight Firebase-based utility for managing user badges — ideal for web apps, Discord bots, or gamified platforms.
-It provides simple, modular ESM functions to initialize Firebase and award or retrieve badges using Firestore.
+It provides simple, modular ESM functions to initialize Firebase, reuse existing apps, and award or retrieve badges using Firestore.
 
 ---
 
 ## 🚀 Installation
 
-You can directly import the module from your GitHub or CDN-hosted source (ESM compatible):
+You can directly import the module from your GitHub repository or CDN (ESM compatible):
 
 ```html
 <script type="module">
@@ -15,7 +15,7 @@ You can directly import the module from your GitHub or CDN-hosted source (ESM co
 </script>
 ```
 
-Or, if bundling locally:
+Or, if you’re bundling locally:
 
 ```
 /your-app/
@@ -47,6 +47,25 @@ const firebaseConfig = {
 initFirebase(firebaseConfig);
 ```
 
+If your page or another module already initializes Firebase elsewhere, Badge.js will automatically detect and reuse it.
+
+---
+
+## 🔁 Using an Existing App
+
+If you need to manually retrieve an existing Firebase app:
+
+```js
+import { getExistingFirebaseApp } from "./main.js";
+
+const existingApp = getExistingFirebaseApp();
+if (existingApp) {
+  console.log("Reusing existing Firebase app:", existingApp.name);
+}
+```
+
+This ensures Badge.js integrates cleanly into larger projects that already load Firebase.
+
 ---
 
 ## 🏷️ Badge Functions
@@ -54,7 +73,7 @@ initFirebase(firebaseConfig);
 ### `badge.award(badgeId, uid)`
 
 Awards a badge to a user.
-If the badge doesn’t exist, it creates a new badge document.
+If the badge doesn’t exist, it creates a new Firestore document.
 
 ```js
 const result = await badge.award("early-supporter", "user_abc123");
@@ -96,26 +115,28 @@ console.log(info);
 
 ## 🧩 API Overview
 
-| Function                    | Description                               |
-| --------------------------- | ----------------------------------------- |
-| `initFirebase(config)`      | Initializes Firebase (only once)          |
-| `getFirestore()`            | Returns active Firestore instance         |
-| `getDatabase()`             | Returns active Realtime Database instance |
-| `getAuth()`                 | Returns Firebase Auth instance            |
-| `badge.award(badgeId, uid)` | Creates or updates a badge entry          |
-| `badge.info(badgeId)`       | Retrieves badge details                   |
+| Function                    | Description                                    |
+| --------------------------- | ---------------------------------------------- |
+| `initFirebase(config)`      | Initializes or reuses an existing Firebase app |
+| `getExistingFirebaseApp()`  | Returns current Firebase app if available      |
+| `getFirestore()`            | Returns active Firestore instance              |
+| `getDatabase()`             | Returns active Realtime Database instance      |
+| `getAuth()`                 | Returns Firebase Auth instance                 |
+| `badge.award(badgeId, uid)` | Creates or updates a badge entry               |
+| `badge.info(badgeId)`       | Retrieves badge details                        |
 
 ---
 
 ## 🧠 Notes
 
-* Works with Firebase v9+ modular SDK.
-* Compatible with modern browsers and bundlers (Vite, Rollup, Webpack).
+* Built for **Firebase v9+** modular SDK.
+* Works in browsers and bundlers (Vite, Rollup, Webpack, etc.).
 * Data is stored under the Firestore collection: **`badges/`**.
-* Realtime Database is initialized for future support but unused in v1.
+* Automatically detects and reuses initialized Firebase apps.
+* Realtime Database is initialized for future extensions.
 
 ---
 
 ## 📄 License
 
-MIT © 2025 **SkunkPlatform**
+MIT © 2025 **SkunkPlatform*
