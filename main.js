@@ -3,7 +3,8 @@
 
 import {
   initializeApp,
-  getApps
+  getApps,
+  getApp
 } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
 
 import {
@@ -16,11 +17,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
 import {
-  getDatabase as _getDatabase,
-  ref,
-  get,
-  child,
-  update
+  getDatabase as _getDatabase
 } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
 
 import {
@@ -35,11 +32,18 @@ let db;
 let rtdb;
 let auth;
 
+/**
+ * Initialize or reuse an existing Firebase app.
+ * @param {object} configuration - Firebase configuration object.
+ * @param {boolean} existingFirebaseScript - If true, assumes Firebase already initialized.
+ */
 export function initFirebase(configuration, existingFirebaseScript = false) {
-  if (!existingFirebaseScript && !getApps().length) {
+  if (getApps().length > 0) {
+    app = getApp();
+    console.info("ℹ️ Using existing Firebase app:", app.name);
+  } else if (!existingFirebaseScript) {
     app = initializeApp(configuration);
-  } else if (getApps().length) {
-    app = getApps()[0];
+    console.info("✅ Initialized new Firebase app:", app.name);
   } else {
     throw new Error("Firebase script not loaded or configuration missing");
   }
@@ -47,6 +51,17 @@ export function initFirebase(configuration, existingFirebaseScript = false) {
   db = _getFirestore(app);
   rtdb = _getDatabase(app);
   auth = _getAuth(app);
+}
+
+/**
+ * Retrieve the current Firebase app instance, if it exists.
+ * @returns {import("firebase/app").FirebaseApp|null}
+ */
+export function getExistingFirebaseApp() {
+  if (getApps().length > 0) {
+    return getApp();
+  }
+  return null;
 }
 
 export function getDatabase() {
@@ -81,7 +96,6 @@ badge.award = async function (badgeId, uid) {
   let alreadyAwarded = false;
 
   if (!badgeSnap.exists()) {
-    // Create badge if it doesn't exist
     await setDoc(badgeRef, { awards: [uid] });
     created = true;
   } else {
