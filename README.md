@@ -11,7 +11,7 @@ You can directly import the module from your GitHub or CDN-hosted source (ESM co
 
 ```html
 <script type="module">
-  import { initFirebase, badge } from "https://your-domain-or-github.io/Badge.js/main.js";
+  import { initFirebase, badge } from "https://raw.githubusercontent.com/SkunkPlatform/Badge.js/refs/heads/main/main.js";
 </script>
 ```
 
